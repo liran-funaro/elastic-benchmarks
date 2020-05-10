@@ -1,0 +1,608 @@
+<!--
+Copyright 2014 Liran Funaro
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+@author Liran Funaro <fonaro@cs.technion.ac.il>
+-->
+<template>
+    <main_html>
+        <html>
+        <head>
+            <title>%(title_head)s</title>
+            <style type="text/css">
+            <![CDATA[
+                /** General CSS **/
+                body {
+                    overflow-y: hidden;
+                    margin: 0;
+                }
+
+                a {
+                    text-decoration: none;
+                    cursor: pointer;
+                    color: black;
+                    padding: 0;
+                }
+                a:HOVER {
+                    color: blue;
+                    text-decoration: underline;
+                }
+
+                /** Presentation buttons CSS **/
+                div.presentationbtn {
+                    background-color: rgba(0,0,0,0.7);
+                    color: white;
+                    cursor: pointer;
+                    text-align: center;
+                }
+
+                div.presentationbtn:HOVER {
+                    background-color: rgba(80,80,80,0.7);
+                }
+
+                div.showbtn {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    border-radius: 10px 0 0 10px;
+
+                    padding: 12px 10px 13px 10px;
+                    height: 14px;
+                    font-size: 14px;
+                    width: 80px;
+                }
+
+                body.show div.showbtn {
+                    padding: 2px 10px 3px 10px;
+                    width: 50px;
+                }
+
+                div.nextfilebtn {
+                    position: absolute;
+                    top: 40px;
+                    right: 0;
+                    height: 19px;
+                    width: 50px;
+                    border-radius: 0;
+                }
+
+                body.show div.nextfilebtn {
+                    top: 0;
+                    right: 72px;
+                    border-radius: 0 10px 10px 0;
+                }
+
+                div.prevfilebtn {
+                    position: absolute;
+                    top: 40px;
+                    right: 50px;
+                    height: 19px;
+                    width: 50px;
+                    border-radius: 10px 0 0 10px;
+                }
+
+                body.show div.prevfilebtn {
+                    top: 0;
+                    right: 122px;
+                }
+
+                /** Frame CSS **/
+                div.titleframe {
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    height: 39px;
+                    position: absolute;
+                    background-color: #f4f4f4;
+                    border-bottom: 1px solid #aaa;
+                    z-index: -1000;
+                }
+
+                body.show div.titleframe {
+                    height: 19px;
+                }
+
+                div.titlepath {
+                    margin: 0;
+                    padding-left: 5px;
+                    height: 39px;
+                    font-size: 2em;
+                    font-weight: bold;
+                    white-space: nowrap;
+                    overflow-y: hidden;
+                    overflow-x: hidden;
+                }
+
+                body.show div.titlepath {
+                    font-size: 1em;
+                    padding: 0;
+                    padding-left: 2px;
+                    padding-right: 10px;
+                    height: 19px;
+                    float: left;
+                }
+
+                div.titleseperator {
+                    float: left;
+                    display: none;
+                }
+
+                body.show div.titleseperator {
+                    display: block;
+                }
+
+                .leftpane {
+                    left: 0;
+                    width: 349px;
+                }
+
+                .rightpane {
+                    left: 350px;
+                }
+
+                div.titlefile {
+                    position: absolute;
+                    font-style: italic;
+                    color: blue;
+
+                    padding-left: 10px;
+                    top: 40px;
+                    right: 0;
+                    height: 19px;
+
+                    border-bottom: 1px solid #ddd;
+                }
+
+                body.show div.titlefile {
+                    position: relative !important;
+                    top: 0 !important;
+                    right: 0 !important;
+                    left: 0 !important;
+                    float: left;
+
+                    border: 0 !important;
+                }
+
+                div.fileList {
+                    border-right: 1px solid #aaa;
+                    position:absolute;
+                    top: 60px;
+                    bottom: 0;
+                    left:0;
+                    overflow-y: scroll;
+                }
+
+                body.show div.fileList {
+                    display: none;
+                }
+
+                div.extrainfo {
+                    position:absolute;
+                    top: 60px;
+                    bottom: 0;
+                    right:0;
+                    overflow-y: auto;
+                }
+
+                body.show div.extrainfo {
+                    top: 20px;
+                    left: 0;
+
+                    border-left: 0 !important;
+                }
+
+                /** Inner detailes CSS **/
+                table.fileList {
+                    text-align: left;
+                    padding: 0 5px 5px 15px;
+                }
+
+                div.filequery {
+                    position: absolute;
+                    top:40px;
+                    height: 20px;
+                    margin: 0;
+                }
+
+                input.filequery {
+                    position: absolute;
+                    top:0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    margin: 0;
+                    width: 100%%;
+                    padding-right: 50px;
+                }
+
+                a.querysweep {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    padding: 1px 5px 5px 1px;
+                    margin-left: -50px;
+                }
+
+                div.folderinfo {
+                    padding-top: 2px;
+                    padding-left: 10px;
+                    font-family: arial;
+                    font-size: 10pt;
+                }
+                a.folderinfolink {
+                    color: #800080;
+                    font-style: italic;
+                }
+                tr.directory { font-weight: bold; }
+                tr.file {
+                    line-height:1em;
+                }
+
+                td.tree {
+                   padding-left: 1em;
+                   border-left:1px dashed black;
+                   border-bottom:1px dashed black;
+                   line-height:1em;
+                }
+                td.treetop { border-bottom:0 !important }
+                span.infokey {
+                   font-weight:bold;
+                   color: #800080;
+                   display: inline;
+                }
+                span.infovalue { color: #0000FF; }
+                span.smalllink { font-size: 8pt; }
+
+                object.filecontent {
+                    display: none;
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    right: 0;
+                    left: 0;
+                    height: 100%%;
+                    width: 100%%;
+                }
+
+                img.showimage {
+                    display: none;
+                    padding: 10px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    max-width: 100%%;
+                    max-height: 100%%;
+                }
+
+                span.filename {
+                    display: inline;
+                }
+                img.fileicon {
+                    width: 16px;
+                    height: 16px;
+                    vertical-align: middle;
+                    padding-left: 0.5em;
+                    display: block;
+                }
+
+                div.infokeyvalue {
+                    margin-left: 2em;
+                }
+            ]]>
+            </style>
+            <script>
+            <![CDATA[
+                function css(selector, property, value) {
+                    for (var i=0; i != document.styleSheets.length;i++) {//Loop through all styles
+                        //Try add rule
+                        try { document.styleSheets[i].insertRule(selector+ ' {'+property+':'+value+'}', document.styleSheets[i].cssRules.length);
+                        } catch(err) {try { document.styleSheets[i].addRule(selector, property+':'+value);} catch(err) {}}//IE
+                    }
+                }
+
+                function setCookie(cname, cvalue) {
+                    document.cookie = cname + "=" + cvalue
+                        + "; domain=cs.technion.ac.il; path=/~fonaro"
+                }
+
+                function getCookie(cname) {
+                    var name = cname + "=";
+                    var ca = document.cookie.split(';');
+                    for(var i=0; i != ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0)==' ') c = c.substring(1);
+                        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+                    }
+                    return "";
+                }
+
+                function moveSeperator(place) {
+                    css(".leftpane", "width", (place-1) + "px")
+                    css(".rightpane", "left", place + "px")
+                    setCookie("research_seperator_place", place)
+                }
+
+                function loadSeperatorPlace() {
+                    place = getCookie("research_seperator_place")
+                    if(place != "") {
+                        moveSeperator(place)
+                    }
+                }
+
+                function getAllExtraInfo() {
+                    return {
+                        info: document.getElementById('folderinfo'),
+                        content: document.getElementById('filecontent'),
+                        image: document.getElementById('showimage')
+                    }
+                }
+
+                function hideAll(nodes) {
+                    for (key in nodes) {
+                       nodes[key].style.display = 'none';
+                    }
+                }
+
+                function showInfo() {
+                    nodes = getAllExtraInfo();
+                    hideAll(nodes);
+
+                    nodes.info.style.display = 'block';
+                }
+
+                function showFileContent(path) {
+                    nodes = getAllExtraInfo();
+                    hideAll(nodes);
+
+                    nodes.content.data = path
+                    nodes.content.style.display = 'block';
+                }
+
+                function showImage(path) {
+                    nodes = getAllExtraInfo();
+                    hideAll(nodes);
+
+                    nodes.image.src = path
+                    nodes.image.style.display = 'block';
+                }
+
+                function OnHashChange() {
+                    filename = location.hash.substring(1)
+                    if(!filename || 0 === filename.length || filename == "info") {
+                        filename = "Folder Information"
+                        showInfo()
+                    } else if(filename.match(/\.(jpg|jpeg|png|gif)$/)) {
+                        showImage(filename);
+                    } else {
+                        showFileContent(filename);
+                    }
+
+                    document.getElementById('titlefile').innerHTML = decodeURIComponent(filename)
+                }
+
+                function getByClass(class_name) {
+                    return Array.prototype.slice.call(document.getElementsByClassName(class_name));
+                }
+
+                function clearQuery() {
+                    el=document.getElementById('filequery');
+                    el.value='';
+                    queryFiles('');
+                }
+
+                function queryFiles(query) {
+                    var sQuery = query.split(" ");
+
+                    files = getByClass("file");
+                    for(i = 0; i != files.length; ++i) {
+                        href = files[i].getElementsByTagName("a")[0].getAttribute("href");
+                        href = decodeURIComponent(href);
+
+                        match = true;
+                        if(href != "..") {
+                            for(var j=0; j != sQuery.length; j++) {
+                                if(!href.includes(sQuery[j])) {
+                                    match = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(match) {
+                            console.log(href);
+                            files[i].style.display = '';
+                            files[i].previousElementSibling.style.display = '';
+                        } else {
+                            files[i].style.display = 'none';
+                            files[i].previousElementSibling.style.display = 'none';
+                        }
+                    }
+                }
+
+                function isHidden(el) {
+                    return (el.offsetParent === null)
+                }
+
+                function iterOrderNext(i, len) {
+                    return i != len ? (i+1) %% len : 0;
+                }
+
+                function iterOrderPrev(i, len) {
+                    return i != 0 ? i-1 : len - 1;
+                }
+
+                function nextFile(iterOrder) {
+                    current_file = location.hash
+
+                    if(current_file.length == 0) {
+                        current_file = "#info"
+                    }
+
+                    a = document.getElementsByTagName("a")
+
+                    for(i = 0; i != a.length; ++i) {
+                        if(a[i].getAttribute("href") == current_file) {
+                            break;
+                        }
+                    }
+
+                    /** If node was not found, we will start from 0 **/
+                    i %%= a.length
+
+                    start_index = iterOrder(i, a.length);
+                    end_index = i;
+
+                    for(i = start_index; i != end_index; i = iterOrder(i,a.length)) {
+                        a_i_href = a[i].getAttribute("href");
+
+                        if(a_i_href === null || a_i_href.indexOf("#") != 0) {
+                            continue;
+                        }
+
+                        if(isHidden(a[i])) {
+                            continue;
+                        }
+
+                        if(a_i_href != current_file) {
+                            location.hash = a_i_href;
+                            break;
+                        }
+                    }
+                }
+
+                function onShow(obj) {
+                    isShowMode = document.body.className == "show";
+                    document.body.className = isShowMode ? "" : "show";
+                    obj.innerHTML = isShowMode ? "Presentation" : "Browse";
+                }
+
+                function showhideValue(key_elem) {
+                    value_elem = key_elem.nextElementSibling
+                    value_visible = value_elem.style.display != 'none';
+
+                    if(value_visible) {
+                        value_elem.style.display = 'none'
+                    } else {
+                        value_elem.style.display = 'inline'
+                    }
+                }
+
+                loadSeperatorPlace();
+            ]]>
+            </script>
+        </head>
+        <body onhashchange="OnHashChange();" onload="OnHashChange();">
+        <div class="titleframe">&#160;</div>
+        <div class="titlepath">%(title_path)s</div>
+        <div class="titleseperator">
+            <svg version="1.1" baseProfile="tiny" x="0px" y="0px" width="19px" height="19px" viewBox="0 0 19 19">
+                <line fill="none" stroke="#000" x1="0" y1="0" x2="19" y2="19"></line>
+            </svg>
+        </div>
+        <div class="titlefile rightpane" id="titlefile">Folder Information</div>
+        <div class="filequery leftpane">
+            <input autocomplete="on" class="filequery" id="filequery" onchange="queryFiles(this.value)" oninput="queryFiles(this.value)" onkeyup="queryFiles(this.value)" onpaste="queryFiles(this.value)" type="text" />
+            <a class="querysweep" onclick="clearQuery()">Clear</a>
+        </div>
+        <div class="fileList leftpane">
+            <table class="fileList">
+                <tr>
+                  <td class="tree treetop">&#160;</td>
+                  <td rowspan="1">&#160;</td>
+                  <td rowspan="1">&#160;</td>
+                </tr>
+                %(tablerows)s
+                <tr>
+                  <td rowspan="2">&#160;</td>
+                </tr>
+                <tr>
+                  <td rowspan="1">&#160;</td>
+                </tr>
+            </table>
+        </div>
+        <div class="extrainfo rightpane" id="extrainfo">
+            <div class="folderinfo"  id="folderinfo">
+                %(info)s
+            </div>
+            <object data="" class="filecontent" id="filecontent">
+                alt: Present file content
+            </object>
+            <img src="" class="showimage" id="showimage">&#160;</img>
+        </div>
+        <div class="presentationbtn showbtn" onclick="onShow(this)">Presentation</div>
+        <div class="presentationbtn nextfilebtn" onclick="nextFile(iterOrderNext)">next</div>
+        <div class="presentationbtn prevfilebtn" onclick="nextFile(iterOrderPrev)">prev</div>
+        </body>
+        </html>
+    </main_html>
+
+    <tablerow type="content" pattern="(.*\.(pdf|conf|rules|data|jpg|jpeg|png|gif))|(exp-out)|(bidder-.*)|(prog-.*)">
+        <tr>
+          <td class="tree" rowspan="2">&#160;</td>
+        </tr>
+        <tr class="file %(type)s">
+            <td rowspan="2">
+                <a href="#%(linkname)s">
+                    <img src="%(icons_path)s/%(icon)s" class="fileicon"/>
+                </a>
+            </td>
+            <td rowspan="2">
+                <a href="#%(linkname)s" title="%(last_modified)s">
+                    <span class="filename">%(name)s</span>
+                </a>
+                <span class="smalllink">(<a href="%(linkname)s" title="%(last_modified)s">link</a>)</span>
+            </td>
+        </tr>
+    </tablerow>
+    <tablerow type="info" pattern="info">
+        <tr>
+          <td class="tree" rowspan="2">&#160;</td>
+        </tr>
+        <tr class="file %(type)s">
+            <td rowspan="2">
+                <a href="#info" class="folderinfolink">
+                    <img src="%(icons_path)s/info.png" class="fileicon"/>
+                </a>
+            </td>
+            <td rowspan="2">
+                <a href="#info" class="folderinfolink" title="%(last_modified)s">
+                    <span class="filename">Folder Information</span>
+                </a>
+                <span class="smalllink">(<a href="%(linkname)s" title="%(last_modified)s">link</a>)</span>
+            </td>
+        </tr>
+    </tablerow>
+    <tablerow type="link">
+        <tr>
+          <td class="tree" rowspan="2">&#160;</td>
+        </tr>
+        <tr class="file %(type)s">
+            <td rowspan="2">
+                <a href="%(linkname)s">
+                    <img src="%(icons_path)s/%(icon)s" class="fileicon"/>
+                </a>
+            </td>
+            <td rowspan="2">
+                <a href="%(linkname)s" title="%(last_modified)s">
+                    <span class="filename">%(name)s</span>
+                </a>
+            </td>
+        </tr>
+    </tablerow>
+    <info_key_value>
+        <div class="infokeyvalue">
+            <span class="infokey">%(key)s:</span>
+            <span class="infovalue">%(value)s</span>
+        </div>
+    </info_key_value>
+</template>

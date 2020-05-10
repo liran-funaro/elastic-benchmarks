@@ -1,0 +1,83 @@
+Libvirt
+-------
+
+virsh - libvirt shell. Can get commands in shell mode or as parameter.
+Basic useful commands:
+* help
+* define <config file> - create a new machine from XML file
+* list [--all] - list active/all VMs 
+* start <VM> - start up a VM
+* destroy <VM> - stop a VM (hard shut down)
+* edit <VM> - edit machine configuration
+* dumpxml <VM>
+* net-* - same as above, but for virtual networks
+* setmem <VM> [--kilobytes] <amount> - set memory amount for VM
+
+GUI for libvirt: virt-manager (run with X forwarding)
+
+Working with images
+-------------------
+
+Disk images are located in /var/lib/libvirt/images.
+Master image is moc-master.qcow2
+Cloned images are named as the VM (e.g vm-13.qcow2)
+Master VM name is "master"
+
+Clone master image (done automatically when an experiment starts):
+qemu-img create -b /var/lib/libvirt/images/moc-master.qcow2 /var/lib/libvirt/images/<machine>.qcow2 -f qcow2
+
+
+Useful scripts
+--------------
+
+scripts/
+* mc_start.py/mc_destroy.py <n> - start/destroy vm-1..n
+* mc_sync.py <n> - rewrite vm-1..n disk image (clone master image)
+* out_exec.sh <cmd> - execute a command, write output to ~/output_logs/<start time>_<cmd>.log, and email when finished (will require changes to work properly - all settings currently hardcoded)
+
+extra/libvirt_config/
+* mkmachine.pl - create a new config file for a memcached VM
+	master.xml - template config file
+(TODO: are the rest of the scripts relevant)
+
+Before starting experiments
+---------------------------
+
+* Generate SSH key without a password at the host (skip if already done):
+	ssh-keygen -t rsa
+* cat ~/.ssh/id_rsa.pub
+* virsh start master. Should take a few seconds to load
+* ssh root@master (password is: 1234)
+* In master, add the new key to ~/.ssh/authorized_keys
+
+
+
+Creating a new machine
+----------------------
+
+* cd <source dir>/extra/libvirt_config
+* ./mkmachine.pl [number] > vm-[number].xml
+* virsh define vm-[number].xml
+* Create a new disk image:
+	qemu-img create -b /var/lib/libvirt/images/moc-master.qcow2 /var/lib/libvirt/images/vm-[number].qcow2 -f qcow2
+* Edit ginet network: virsh net-edit ginet
+	* Under section <dhcp>, add the new machine, for example:
+		<host mac='52:54:00:1e:2d:18' name='vm-24' ip='192.168.123.25' />
+* Reset the virtual network:
+	* virsh net-destroy ginet
+	* virsh net-start ginet
+* As root, add the new machine to /etc/hosts
+* virsh start vm-[number]
+* Wait a few seconds, then ssh root@vm-[number] echo success
+* If "success" was printed (should also prompt before connecting), everything is good. If can't connect and no ping after a while, see troubleshooting
+* virsh destroy vm-[number]
+
+TODO: relevant only for memcached machines
+
+
+Troubleshooting
+---------------
+
+* Can't connect to guest/no ping after a long while:
+	Start virt-manager, and open the guest display. If it's stuck at boot loader, boot it and it should work in the future.
+	Otherwise, check network configuration or guest log in /var/log/libvirt/qemu/

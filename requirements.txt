@@ -1,0 +1,12 @@
+matplotlib
+scipy
+numpy
+pandas>=0.25.0
+bokeh
+seaborn
+tables
+psutil
+flask
+msgpack
+msgpack_numpy
+nesteddict

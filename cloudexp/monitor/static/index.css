@@ -1,0 +1,307 @@
+/*
+Author: Liran Funaro <liran.funaro@gmail.com>
+
+Copyright (C) 2006-2018 Liran Funaro
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+body, html{
+    background-color: #111;
+    color: white;
+    font-family: monospace;
+    margin: 0;
+}
+
+div.query {
+    height: 2em;
+    padding: 2px 4px 0;
+    margin: 0;
+    min-width: fit-content;
+    white-space: nowrap;
+}
+
+.counter {
+    font-weight: bold;
+    background: #353535;
+    border-radius: 4px;
+    border: 0;
+    text-align:center;
+    height: 2em;
+    padding: 2px 1em 4px;
+}
+
+.lines {
+    color: rgb(179, 255, 255);
+}
+
+.info {
+    color: rgb(0, 255, 0);
+}
+
+.warning {
+    color: rgb(255, 255, 0);
+}
+
+.error {
+    color: #f44242;
+}
+
+.dead {
+    color: #EEE;
+}
+
+.suspend {
+    color: #f49841;
+}
+
+a.path-link {
+    color: #7fedff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a.path-link:hover {
+    text-decoration: underline;
+}
+
+a.path-link:visited {
+    color: #e5a1fc;
+}
+
+/* fixed header: https://jsfiddle.net/SpYk3/Gn499/ */
+
+/* define height and width of scrollable area. Add 16px to width for scrollbar          */
+div.tableContainer {
+    clear: both;
+    border: none;
+    overflow: auto;
+}
+
+/* Reset overflow value to hidden for all non-IE browsers. */
+html>body div.tableContainer {
+    overflow: hidden;
+}
+
+/* define width of table. Add 16px to width for scrollbar.           */
+html>body div.tableContainer table {
+    border-collapse: collapse;
+}
+
+/* set table header to a fixed position. WinIE 6.x only                                       */
+/* In WinIE 6.x, any element with a position property set to relative and is a child of       */
+/* an element that has an overflow property set, the relative value translates into fixed.    */
+/* Ex: parent element DIV with a class of tableContainer has an overflow property set to auto */
+thead.fixedHeader tr {
+    position: relative;
+}
+
+/* set THEAD element to have block level attributes. All other non-IE browsers            */
+/* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+html>body thead.fixedHeader tr {
+    display: block;
+}
+
+/* make the TH elements pretty */
+thead.fixedHeader th {
+    background-color: #666;
+    color: white;
+    border-top: none;
+    border-bottom: none;
+    border-left: none;
+    border-right: 1px solid white;
+    font-weight: normal;
+    font-size: large;
+    padding:2px 3px 2px 3px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: grab;
+}
+
+thead.fixedHeader th:last-child {
+  border-right: none;
+}
+
+/* define the table content to be scrollable                                              */
+/* set TBODY element to have block level attributes. All other non-IE browsers            */
+/* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+/* induced side effect is that child TDs no longer accept width: auto                     */
+html>body tbody.scrollContent {
+    display: block;
+    overflow: auto;
+}
+
+.scrollTable {
+    border: 0;
+    padding: 0;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+/* make TD elements pretty. Provide alternating classes for striping the table */
+/* http://www.alistapart.com/articles/zebratables/                             */
+tbody.scrollContent td, tbody.scrollContent tr.normalRow tr {
+    background-color: #111;
+    border-bottom: 1px solid black;
+    border-top: none;
+    border-left: none;
+    border-right: 1px solid #AAA;
+    padding: 0 3px 0 3px;
+    white-space: pre-wrap;
+}
+
+tbody.scrollContent tr.alternateRow td {
+    background-color: #333;
+    border-bottom: 1px solid #333;
+    border-top: none;
+    border-left: none;
+    border-right: 1px solid #AAA;
+    padding:0 3px 0 3px;
+    white-space: pre-wrap;
+}
+
+tbody.scrollContent td:last-child {
+   border-right-color: #111;
+}
+
+tbody.scrollContent tr.alternateRow td:last-child {
+   border-right-color: #333;
+}
+
+tr.hidden {
+    display:none;
+}
+
+td.match {
+    border: 2px solid white !important;
+}
+
+.scrollContent tr:hover td {
+    border-bottom: 1px dashed #EEE !important;
+    background: #555  !important;
+}
+
+input, select, button, input[type=checkbox] + label {
+  /*background: #a5b4cc;*/
+  background: #61656d;
+  color: white;
+  border: none;
+  padding: 3px 4px 3px;
+  border-radius: 4px;
+  outline: 0;
+  font-family: monospace;
+  position: relative;
+}
+
+input::placeholder {
+    color: #999;
+}
+
+input[type=button], button, input[type=checkbox] + label {
+    cursor: pointer;
+}
+
+input:hover, select:hover, button:hover, input[type=checkbox] + label:hover {
+    background: #7a7f89;
+}
+
+input:focus, select:focus, button:focus, input[type=checkbox] + label:focus {
+	background: #0087af;
+}
+
+input:focus::placeholder {
+    color: #00a2d3;
+}
+
+.close-btn {
+    background: #a50000;
+    color: white;
+}
+
+.close-btn:hover {
+    background: #c40000 !important;
+}
+
+input[type=checkbox] + label {
+    text-align:center;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+input[type=checkbox]:checked + label {
+    background: #0da500 !important;
+    color: #fff;
+}
+
+input[type=checkbox]:checked + label:hover {
+    background: #0eb700 !important;
+}
+
+span.clearable {
+    position: relative;
+}
+span.clearable span.clear-btn {
+    position: absolute;
+    border: 0;
+	margin: 0;
+	outline: 0;
+	padding: 0;
+    top: 0;
+    right: 0;
+    width: 1.5em;
+    height: 1.5em;
+    cursor: pointer;
+    display: none;
+    font-weight: bold;
+    text-align: left;
+    color: white;
+}
+span.clearable input {
+    box-sizing: border-box;
+}
+
+/* Autocomplete form. Taken from: https://www.w3schools.com/howto/howto_js_autocomplete.asp */
+.autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: inline-block;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 9999;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    /*right: 0;*/
+}
+.autocomplete-items div {
+    padding: 2px;
+    cursor: pointer;
+    background-color: #61656d;
+    border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #7a7f89;
+}
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}

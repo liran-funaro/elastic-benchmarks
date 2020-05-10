@@ -1,0 +1,41 @@
+<network>
+  <name>ginet</name>
+  <uuid>d149637c-b31a-10b0-ca67-d18a6c7d5506</uuid>
+  <forward mode='nat'>
+    <nat>
+      <port start='1024' end='65535'/>
+    </nat>
+  </forward>
+  <bridge name='virbr1' stp='on' delay='0'/>
+  <mac address='52:54:00:70:5f:e4'/>
+  <ip address='192.168.123.254' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.123.2' end='192.168.123.253'/>
+      <host mac='52:54:00:1e:2d:00' name='master' ip='192.168.123.253'/>
+      <host mac='52:54:00:1e:2d:01' name='vm-1' ip='192.168.123.1'/>
+      <host mac='52:54:00:1e:2d:02' name='vm-2' ip='192.168.123.2'/>
+      <host mac='52:54:00:1e:2d:03' name='vm-3' ip='192.168.123.3'/>
+      <host mac='52:54:00:1e:2d:04' name='vm-4' ip='192.168.123.4'/>
+      <host mac='52:54:00:1e:2d:05' name='vm-5' ip='192.168.123.5'/>
+      <host mac='52:54:00:1e:2d:06' name='vm-6' ip='192.168.123.6'/>
+      <host mac='52:54:00:1e:2d:07' name='vm-7' ip='192.168.123.7'/>
+      <host mac='52:54:00:1e:2d:08' name='vm-8' ip='192.168.123.8'/>
+      <host mac='52:54:00:1e:2d:09' name='vm-9' ip='192.168.123.9'/>
+      <host mac='52:54:00:1e:2d:0a' name='vm-10' ip='192.168.123.10'/>
+      <host mac='52:54:00:1e:2d:0b' name='vm-11' ip='192.168.123.11'/>
+      <host mac='52:54:00:1e:2d:0c' name='vm-12' ip='192.168.123.12'/>
+      <host mac='52:54:00:1e:2d:0d' name='vm-13' ip='192.168.123.13'/>
+      <host mac='52:54:00:1e:2d:0e' name='vm-14' ip='192.168.123.14'/>
+      <host mac='52:54:00:1e:2d:0f' name='vm-15' ip='192.168.123.15'/>
+      <host mac='52:54:00:1e:2d:10' name='vm-16' ip='192.168.123.16'/>
+      <host mac='52:54:00:1e:2d:11' name='vm-17' ip='192.168.123.17'/>
+      <host mac='52:54:00:1e:2d:12' name='vm-18' ip='192.168.123.18'/>
+      <host mac='52:54:00:1e:2d:13' name='vm-19' ip='192.168.123.19'/>
+      <host mac='52:54:00:1e:2d:14' name='vm-20' ip='192.168.123.20'/>
+      <host mac='52:54:00:1e:2d:15' name='vm-21' ip='192.168.123.21'/>
+      <host mac='52:54:00:1e:2d:16' name='vm-22' ip='192.168.123.22'/>
+      <host mac='52:54:00:1e:2d:17' name='vm-23' ip='192.168.123.23'/>
+      <host mac='52:54:00:1e:2d:18' name='vm-24' ip='192.168.123.24'/>
+    </dhcp>
+  </ip>
+</network>

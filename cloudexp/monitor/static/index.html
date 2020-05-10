@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Experiment Monitor</title>
+    <!-- open source libraries -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.color.js"></script>
+    <script src="js/md5.js"></script>
+    <script src="js/string-hue.js"></script>
+    <script src="js/path-autocomplete.js"></script>
+    <!-- script src="colResizable.min.js"></script -->
+
+    <!-- original -->
+    <link rel="stylesheet" type="text/css" href="index.css"/>
+    <script type="text/javascript" src="js/log-server-api.js"></script>
+    <script type="text/javascript" src="js/log-server-handlers.js"></script>
+    <script type="text/javascript" src="js/log-server-main.js"></script>
+</head>
+
+<body onresize="onResize()" onhashchange="onHashChange()">
+<div id="query" class="query">
+    <label for="path">Path
+        <span class="autocomplete">
+            <input id="path" name='path' placeholder="experiment path..." type="text" style="width:25ch;" autocomplete="off"/>
+        </span>
+    </label>
+
+    <input type="button" value="Up" onclick="onPathUp()"/>
+
+    <label for="filter">Filter
+        <span class="clearable">
+            <input id="filter" type="text" name="filter" placeholder="filter regular expression..." style="width:28ch;"/>
+            <span id="clear-filter" class="clear-btn" onclick="onClearFilter()">X</span>
+        </span>
+    </label>
+
+    <label for="level">Level
+        <select id="level" onchange="onChangeLevel(this.value)">
+            <option value="debug">debug</option>
+            <option value="info">info</option>
+            <option value="warning">warning</option>
+            <option value="error">error</option>
+            <option value="critical">critical</option>
+        </select>
+    </label>
+
+    <input type="checkbox" id="scroll" name="scroll" checked hidden>
+    <label for="scroll" onmouseup="onAutoScroll()">Auto scroll</label>
+
+    <span id="counter" class="counter lines">0</span>
+    <span id="info_counter" class="counter info">0</span>
+    <span id="warning_counter" class="counter warning">0</span>
+    <span id="error_counter" class="counter error">0</span>
+    <input type="button" id='listen' value="Pause" onclick="stopResumeListening()"/>
+    <select id="action" onchange="onAction(this)">
+        <option value="">Actions...</option>
+        <option value="terminate">Terminate (SIGINT)</option>
+        <option value="kill">Kill (SIGKILL)</option>
+        <option value="launch">Launch</option>
+        <option value="launch-overwrite">Launch (overwrite)</option>
+        <option value="batch">Batch</option>
+        <option value="batch-overwrite">Batch (overwrite)</option>
+    </select>
+</div>
+<div id="errors" class="errors"></div>
+<div id="main" class="tableContainer">
+<table id="log" class="scrollTable">
+    <thead class="fixedHeader">
+        <tr id="headers" class="headers"></tr>
+    </thead>
+    <tbody id="log_content" class="scrollContent" onscroll="onScroll();">
+    </tbody>
+</table>
+</div>
+</body>
+
+</html>
